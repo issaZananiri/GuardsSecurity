@@ -1,15 +1,77 @@
-<resources>
-    <string name="app_name">Camera app</string>
-    <string name="start_camera">Start Camera</string>
+<?xml version="1.0"?>
+
+    <resources>
+
+    <string name="app_name">BZU Guards </string>
+
+    <string name="start_cameraParking">Parking</string>
+
+    <string name="start_cameraSearch">Search</string>
+
+    <string name="start_camera">Scan</string>
+
     <string name="imageview">imageView</string>
 
     <string name="delete_success">Images was deleted!</string>
+
     <string name="delete_failure">Image deletion failed</string>
+
     <string name="saved_message">Image Saved at %1$s</string>
+
     <string name="not_saved">Image not saved!</string>
+
     <string name="error">Error finding image</string>
+
     <string name="go">GO</string>
+
     <string name="permission_denied">Permission denied</string>
+
     <string name="imageview_description">The imageview that contains the emojified picture</string>
+
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_header_title">BZU Guards </string>
+
+    <string name="nav_header_subtitle">Car Parking System</string>
+
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="action_settings">Log out</string>
+
+    <string name="failed">failed</string>
+
+    <string name="menu_home">Search</string>
+
+    <string name="menu_scan">Add Guest</string>
+
+    <string name="menu_slideshow">Parking Areas</string>
+
+    <string name="menu_tools">Account Settings</string>
+
+    <string name="menu_share">Report Violation</string>
+
+    <string name="menu_send">Report to Guards</string>
+
+    <string name="title_activity_login">Birzeit University Guards</string>
+
+    <string name="prompt_email">Email</string>
+
+    <string name="prompt_password">Password</string>
+
+    <string name="action_sign_in">Sign in </string>
+
+    <string name="action_sign_in_short">Sign in</string>
+
+    <string name="welcome">"Welcome !"</string>
+
+    <string name="invalid_username">Not a valid username</string>
+
+    <string name="invalid_password">Password must be 5 characters</string>
+
+    <string name="login_failed">"Login failed"</string>
 
 </resources>

@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+
+    <EditText
+        android:id="@+id/editTextV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+
+        android:layout_marginTop="20dp"
+        android:hint="Enter Plate Number"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/SendViolation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextV"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="225dp"
+        android:textSize="8pt"
+
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="13dp"
+        android:text="Report"
+        tools:ignore="NotSibling" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextV">
+
+        <EditText
+            android:id="@+id/editTextVT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Violation Type"
+            android:inputType="textShortMessage"
+            tools:ignore="DuplicateIds" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextVT"
+            tools:ignore="NotSibling">
+
+            <EditText
+                android:id="@+id/editTextVD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="40dp"
+                android:ems="10"
+                android:hint="Violation Details"
+                android:inputType="textMultiLine"
+                tools:ignore="DuplicateIds" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextVD"
+                tools:ignore="NotSibling">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/floatingActionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="10pt"
+                    android:layout_marginBottom="10pt"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

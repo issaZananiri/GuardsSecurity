@@ -1,4 +1,4 @@
-package krunal.com.example.cameraapp;
+package krunal.com.example.cameraapp.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,7 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-class BitmapUtils {
+import krunal.com.example.cameraapp.R;
+
+public class BitmapUtils {
 
 
     private static final String FILE_PROVIDER_AUTHORITY = "com.example.android.fileprovider";
@@ -64,8 +65,9 @@ class BitmapUtils {
      *
      * @return The temporary image file.
      * @throws IOException Thrown if there is an error creating the file
+     * @param context
      */
-    static File createTempImageFile(Context context) throws IOException {
+    public static File createTempImageFile(MainActivity context) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -80,11 +82,9 @@ class BitmapUtils {
 
     /**
      * Deletes image file for a given path.
-     *
-     * @param context   The application context.
-     * @param imagePath The path of the photo to be deleted.
-     */
-    static boolean deleteImageFile(Context context, String imagePath) {
+     *  @param context   The application context.
+     * @param imagePath The path of the photo to be deleted.*/
+    public static boolean deleteImageFile(MainActivity context, String imagePath) {
 
         // Get the file
         File imageFile = new File(imagePath);
@@ -124,7 +124,7 @@ class BitmapUtils {
      * @return The path of the saved image.
      */
 
-    static String saveImage(Context context, Bitmap image) {
+    public static String saveImage(MainActivity context, Bitmap image) {
 
         String savedImagePath = null;
 
@@ -165,11 +165,9 @@ class BitmapUtils {
 
     /**
      * Helper method for sharing an image.
-     *
-     * @param context   The image context.
-     * @param imagePath The path of the image to be shared.
-     */
-    static void shareImage(Context context, String imagePath) {
+     *  @param context   The image context.
+     * @param imagePath The path of the image to be shared.*/
+    public static void shareImage(MainActivity context, String imagePath) {
         // Create the share intent and start the share activity
         File imageFile = new File(imagePath);
         Intent shareIntent = new Intent(Intent.ACTION_SEND);

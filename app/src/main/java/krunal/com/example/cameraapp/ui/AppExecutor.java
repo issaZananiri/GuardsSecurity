@@ -1,4 +1,4 @@
-package krunal.com.example.cameraapp;
+package krunal.com.example.cameraapp.ui;
 
 import android.os.Handler;
 import android.os.Looper;

@@ -1,6 +1,7 @@
-package krunal.com.example.cameraapp;
+package krunal.com.example.cameraapp.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,7 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -24,8 +25,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.sdtoolkit.anpr.api.AnprEngineFactory;
 import com.sdtoolkit.anpr.api.IAnprEngine;
 
@@ -45,8 +53,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Map;
 
-
+import krunal.com.example.cameraapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_STORAGE_PERMISSION = 1;
     private static final int REQUEST_INTERNET_PERMISSION = 1;
     private static String plates = "Plates";
+    private ProgressDialog progressDialog;
 
     private static final String FILE_PROVIDER_AUTHORITY = "com.example.android.fileprovider";
 
@@ -72,13 +82,21 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mClear, mSave, mShare;
     Uri photoURI;
 
+    DatabaseReference databaseUser;
+
     IAnprEngine mAnprEngine = AnprEngineFactory.createAnprEngine(this);
 
+    private static final String TAG = "MainActivity";
+
+    @SuppressLint("RestrictedApi")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_scan);
+setTitle( "SCAN PLATE" );
+        databaseUser = FirebaseDatabase.getInstance().getReference();
+
 
         mAppExcutor = new AppExecutor();
 
@@ -90,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
         mtextView = findViewById(R.id.textView);
 
 
-        mImageView.setVisibility(View.GONE);
+        mImageView.setVisibility(View.VISIBLE);
         mShare.setVisibility(View.GONE);
         mSave.setVisibility(View.GONE);
         mClear.setVisibility(View.GONE);
-        mtextView.setVisibility(View.VISIBLE);
-        //mtextView.setText("HIIIIIIIIIIIIIIII");
+        mtextView.setVisibility(View.GONE);
+
 
         mStartCamera.setOnClickListener(v -> {
 
@@ -138,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     sendImage(mtextView);
-               Toast.makeText(this, "Image sent", Toast.LENGTH_LONG).show();
+             // Toast.makeText(this, "Image sent", Toast.LENGTH_LONG).show();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -151,20 +169,14 @@ public class MainActivity extends AppCompatActivity {
 
         mClear.setOnClickListener(v -> {
             // Clear the image and toggle the view visibility
-            mImageView.setImageResource(0);
-            mStartCamera.setVisibility(View.VISIBLE);
-            mSave.setVisibility(View.GONE);
-            mShare.setVisibility(View.GONE);
-            mClear.setVisibility(View.GONE);
-
-            mAppExcutor.diskIO().execute(() -> {
-                // Delete the temporary image file
-                BitmapUtils.deleteImageFile(this, mTempPhotoPath);
-            });
+     finish();
 
         });
 
         mShare.setOnClickListener((View v) -> {
+
+          //  Intent intent = new Intent( this,ScanResultActivity.class );
+           // startActivity( intent );
 
             mAppExcutor.diskIO().execute(() -> {
                 // Delete the temporary image file
@@ -258,15 +270,18 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Method for processing the captured image and setting it to the TextView.
      */
+
+    @SuppressLint("RestrictedApi")
     private void processAndSetImage() {
 
         // Toggle Visibility of the views
         mStartCamera.setVisibility(View.GONE);
         mSave.setVisibility(View.VISIBLE);
+        mSave.setVisibility(View.VISIBLE);
         mShare.setVisibility(View.VISIBLE);
         mClear.setVisibility(View.VISIBLE);
         mImageView.setVisibility(View.VISIBLE);
-
+        mtextView.setVisibility(View.VISIBLE);
         // Resample the saved image to fit the ImageView
         mResultsBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
 
@@ -277,28 +292,16 @@ public class MainActivity extends AppCompatActivity {
 
     void sendImage(TextView textView) throws IOException {
 
-//        if (ContextCompat.checkSelfPermission(getApplicationContext(),
-//                Manifest.permission.INTERNET)
-//                != PackageManager.PERMISSION_GRANTED) {
-//
-//            // If you do not have permission, request it
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.INTERNET},
-//                    REQUEST_STORAGE_PERMISSION);
-//        } else {
-            // Launch the camera if the permission exists
+        runOnUiThread( () -> {
+            progressDialog = new ProgressDialog( this );
+            progressDialog.setMessage( "Loading ... " );
+            progressDialog.setCancelable( false );
+            progressDialog.create();
+        } );
+
+
             try {
                 String secret_key = "sk_b21a58ed1395b3be6083f6e3";
-
-                // Read image file to byte array
-//                Path path;
-//                //path = FileSystems.getDefault().getPath(mTempPhotoPath);
-//                path = FileSystems.getDefault().getPath(mTempPhotoPath);
-//                byte[] data = Files.readAllBytes(path);
-//
-//
-//                // Encode file bytes to base64
-//                byte[] encoded = Base64.getEncoder().encode(data);
 
                 File imagefile = new File(mTempPhotoPath);
                 FileInputStream fis = null;
@@ -324,6 +327,14 @@ public class MainActivity extends AppCompatActivity {
 
                 // Send our Base64 content over the stream
                 try (OutputStream os = http.getOutputStream()) {
+
+                    runOnUiThread( () -> {
+                        if (!progressDialog.isShowing()){
+                            progressDialog.show();
+                        }
+                    } );
+
+
                     os.write(encoded);
                 }
                 Log.d("HTTP REQUEST", "About to send HTTP Request");
@@ -342,7 +353,13 @@ public class MainActivity extends AppCompatActivity {
 
                     http.disconnect();
                     Log.d("HTTP REQUEST", json_content);
+
+
+
                     try {
+
+
+
 
                         JSONObject jsonObject = new JSONObject(json_content);
                         JSONArray results = jsonObject.getJSONArray("results");
@@ -351,16 +368,27 @@ public class MainActivity extends AppCompatActivity {
                         plates = jsonObject1.getString("plate");
                         Log.e("plate",""+plates);
 
-                        displayPlate(plates,textView);
-
-
+                       // publishProgress(plates,textView);
+                        checkIfExist(plates, textView);
+                        OpenScanResult( plates );
+                        runOnUiThread( () -> {
+                            if (progressDialog.isShowing()){
+                                progressDialog.dismiss();
+                            }
+                        } );
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        String msg ="Try Scanning again, Error Accured";
+                        publishProgress(msg,textView);
+                        runOnUiThread( () -> {
+                            if (progressDialog.isShowing()){
+                                progressDialog.dismiss();
+                            }
+                        } );
                     }
                 } else {
                     Log.d("HTTP REQUEST", "Non 200 status code :" + status_code);
                 }
-
 
 
             } catch (MalformedURLException e) {
@@ -372,8 +400,126 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
+    private void publishProgress(String plate, TextView textView) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                displayPlate(plate,textView);
+            }
+        });
+    }
+
     private void displayPlate(String plate , TextView textView){
-        textView.setText(plate+"");
+        textView.setText(plate);
+
+      //  String id = databaseUser.push().getKey();
+/*
+        String idd = databaseUser.push().getKey();
+        int id = 1151736;
+        String name = "fahed";
+
+        user u = new user(id,name,plate);
+
+        databaseUser.child(idd).setValue(u);
+
+        Toast.makeText(this,"Added succesfully ",Toast.LENGTH_LONG).show();
+*/
+    }
+
+    private void checkIfExist(String plate,TextView textview){
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        firestore.setFirestoreSettings(settings);
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef =
+                db.collection("Drivers").document(plate);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map map = document.getData();
+                        publishProgress(document.getData().get("Name").toString(),mtextView);
+                        makeDriver(map);
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
+
+
+    private void makeDriver(Map map){
+        String name,plate,carType,subType,i;
+int violation = 0;
+        if(map.get("Name")!=null) {
+            name = map.get("Name").toString();
+        }
+        else{
+            name="Name";
+        }
+        
+        if(map.get("Plate")!=null) {
+            plate = map.get("Plate").toString();
+        }
+        else{
+            plate = "Plate";
+        }
+
+        if(map.get("CarType")!=null) {
+            carType = map.get("CarType").toString();
+        }
+        else{
+            carType = "carType";
+        }
+
+        if(map.get("subType")!=null) {
+            subType = map.get("SubType").toString();
+        }
+        else {
+            subType="subType";
+        }
+        if(map.get("violation")!=null) {
+            name = map.get("violation").toString();
+        }
+        else{
+            name="violation";
+        }
+        int id=00;
+        if(map.get("ID")!=null) {
+            i = map.get("ID").toString();
+
+            id = Integer.parseInt(i, 10);
+        }
+
+    
+        Driver d = new Driver(id,name,plate,carType,violation ,subType);
+
+        Intent profile = new Intent(this,ViewProfile.class);
+      //  profile.putExtra("Driver",  d);
+        profile.putExtra("Driver", (Parcelable) d);
+        startActivity(profile);
+    }
+
+    private void OpenScanResult(String plate){
+        Intent intent = new Intent( MainActivity.this, ScanResultActivity.class );
+        intent.putExtra( "plate", plate );
+        startActivity( intent );
     }
 
 }

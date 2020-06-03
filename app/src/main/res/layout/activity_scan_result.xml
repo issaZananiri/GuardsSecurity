@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".ui.ScanResultActivity">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="21sp"
+        android:text="Plate Id"
+        android:textColor="@color/colorPrimaryDark"
+        android:id="@+id/scan_result_plate"
+        />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+android:textSize="11pt"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+android:textColor="@color/colorPrimaryDark"
+        android:layout_marginTop="140pt"
+        android:text="Is this the Correct Number ?" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="8pt"
+        android:layout_marginTop="222pt"
+        android:layout_marginLeft="122pt"
+        android:text="Confirm"
+        android:textColor="@color/colorPrimaryDark"/>
+    <Button
+        android:id="@+id/buttonB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="8pt"
+        android:layout_marginTop="222pt"
+        android:layout_marginLeft="12pt"
+        android:text="Scan"
+        android:textColor="@color/colorPrimaryDark"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:id="@+id/recyclerView_search"/>
+
+</RelativeLayout>

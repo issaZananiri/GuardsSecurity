@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "455967394665",
+    "firebase_url": "https://bzutest.firebaseio.com",
+    "project_id": "bzutest",
+    "storage_bucket": "bzutest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455967394665:android:edfcfc89112124d2facbf8",
+        "android_client_info": {
+          "package_name": "krunal.com.example.cameraapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455967394665-4qln0sl6ltnidp1dpbn97esmunrqaso2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "krunal.com.example.cameraapp",
+            "certificate_hash": "562efc627936e229b505dc5e02fd18d580cb83b2"
+          }
+        },
+        {
+          "client_id": "455967394665-9m77va7qnbbvuglun2i6u4uddc28rcd2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHrS74nYPd19MmxoOspH26HUKdaRHy2ZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455967394665-9m77va7qnbbvuglun2i6u4uddc28rcd2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
